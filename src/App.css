@@ -1,0 +1,594 @@
+/* ============================================================
+   App.css — Global Styles
+   Place this file at: src/App.css
+   Covers layout, card design, animations, and responsiveness.
+   ============================================================ */
+
+/* ── Google Fonts Import ── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── CSS Variables (Design Tokens) ── */
+:root {
+  --bg: #0f0f13;
+  --surface: #17171f;
+  --card: #1e1e28;
+  --card-hover: #242430;
+  --border: #2e2e3d;
+  --accent: #7c6ef9;
+  --accent-light: #a89cf8;
+  --accent-glow: rgba(124, 110, 249, 0.18);
+  --success: #4ade80;
+  --success-bg: rgba(74, 222, 128, 0.12);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
+  --text-primary: #f0f0f8;
+  --text-secondary: #8585a0;
+  --text-muted: #55556a;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.3);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ── */
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Decorative background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 110, 249, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 110, 249, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── App Wrapper ── */
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 16px 80px;
+}
+
+/* Ambient glow blob */
+.app-wrapper::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(124, 110, 249, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Todo Container ── */
+.todo-container {
+  width: 100%;
+  max-width: 580px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: var(--shadow), 0 0 0 1px rgba(255,255,255,0.03) inset;
+  animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ── */
+.todo-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header-icon {
+  font-size: 28px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  display: block;
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.todo-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #fff 40%, var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.todo-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+/* ── Stats Row ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 10px;
+  text-align: center;
+  transition: transform var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card.accent {
+  border-color: rgba(124, 110, 249, 0.3);
+  background: linear-gradient(135deg, var(--card), rgba(124, 110, 249, 0.08));
+}
+
+.stat-card.success {
+  border-color: rgba(74, 222, 128, 0.3);
+  background: linear-gradient(135deg, var(--card), rgba(74, 222, 128, 0.08));
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.stat-card.accent .stat-number { color: var(--accent-light); }
+.stat-card.success .stat-number { color: var(--success); }
+
+.stat-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+/* ── Input Area ── */
+.input-area {
+  margin-bottom: 24px;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 10px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 6px 6px 18px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.input-wrapper:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.task-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  padding: 8px 0;
+}
+
+.task-input::placeholder {
+  color: var(--text-muted);
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.add-btn:hover {
+  background: var(--accent-light);
+  transform: scale(1.07);
+  box-shadow: 0 4px 16px rgba(124, 110, 249, 0.4);
+}
+
+.add-btn:active {
+  transform: scale(0.96);
+}
+
+/* Shake animation for error */
+.input-wrapper.shake {
+  animation: shake 0.4s ease;
+  border-color: var(--danger);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+.error-msg {
+  color: var(--danger);
+  font-size: 0.8rem;
+  margin-top: 8px;
+  padding-left: 4px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Filter Tabs ── */
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.83rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.filter-tab:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.filter-tab.active {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+.tab-count {
+  background: var(--border);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.filter-tab.active .tab-count {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── Task List ── */
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 60px;
+}
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.empty-icon {
+  font-size: 2.2rem;
+  filter: grayscale(0.3);
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+}
+
+/* ── Task Item ── */
+.task-item {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), opacity 0.3s ease;
+  animation: taskIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes taskIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 110, 249, 0.3);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Completed task style */
+.task-item.completed {
+  opacity: 0.6;
+  border-color: rgba(74, 222, 128, 0.2);
+  background: linear-gradient(135deg, var(--card), rgba(74, 222, 128, 0.04));
+}
+
+/* Removing animation */
+.task-item.removing {
+  opacity: 0;
+  transform: translateX(20px) scale(0.96);
+}
+
+/* ── View Mode ── */
+.view-mode {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Custom Checkbox */
+.checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.checkbox:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.checkbox.checked {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+/* Task text */
+.task-text {
+  flex: 1;
+  font-size: 0.93rem;
+  color: var(--text-primary);
+  word-break: break-word;
+  line-height: 1.5;
+  transition: all var(--transition);
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Action Buttons */
+.task-actions {
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.task-item:hover .task-actions {
+  opacity: 1;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-save,
+.btn-cancel {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  color: var(--text-secondary);
+}
+
+.btn-edit:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-light);
+  background: var(--accent-glow);
+}
+
+.btn-edit:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.btn-delete:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.btn-save:hover {
+  border-color: var(--success);
+  color: var(--success);
+  background: var(--success-bg);
+}
+
+.btn-cancel:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+/* ── Edit Mode ── */
+.edit-mode {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.edit-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 0.93rem;
+  color: var(--text-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Footer / Progress ── */
+.todo-footer {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.progress-bar-wrap {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--success));
+  border-radius: 99px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .app-wrapper {
+    padding: 20px 12px 60px;
+    align-items: flex-start;
+  }
+
+  .todo-container {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+
+  .todo-title {
+    font-size: 1.8rem;
+  }
+
+  .stats-row {
+    gap: 8px;
+  }
+
+  .stat-number {
+    font-size: 1.4rem;
+  }
+
+  .task-actions {
+    opacity: 1; /* always show on mobile */
+  }
+
+  .filter-tab {
+    padding: 8px 8px;
+    font-size: 0.78rem;
+  }
+}
